@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>KANYMAR</title>
+    <script>
+      // Store the URL the user was trying to access, then redirect to index
+      sessionStorage.redirect = location.href;
+      var pathSegmentsToKeep = 1;
+      var l = location;
+      var base = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + '/' + l.pathname.split('/')[1];
+      l.replace(base + '/');
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
