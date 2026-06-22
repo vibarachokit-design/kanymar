@@ -48,11 +48,9 @@ export default function Navbar() {
               {navLinks.map(link => (
                 <Link key={link.to} to={link.to} className={`font-inter text-[13px] font-medium uppercase tracking-[0.1em] transition-colors hover:text-turquesa ${showSolid ? 'text-cafe' : 'text-blancoRoto'}`}>{link.label}</Link>
               ))}
-              {isAdmin && (
-                <Link to="/admin" className={`font-inter text-[13px] font-medium uppercase tracking-[0.1em] transition-colors hover:text-turquesa flex items-center gap-1 ${showSolid ? 'text-cafe' : 'text-blancoRoto'} ${isAdminPage ? 'text-turquesa' : ''}`}>
-                  <Settings size={13} /> Admin
-                </Link>
-              )}
+              <Link to="/admin" className={`font-inter text-[13px] font-medium uppercase tracking-[0.1em] transition-colors hover:text-turquesa flex items-center gap-1 ${showSolid ? 'text-cafe' : 'text-blancoRoto'} ${isAdminPage ? 'text-turquesa' : ''}`}>
+                <Settings size={13} /> Admin
+              </Link>
             </div>
 
             <div className="flex items-center gap-2">
@@ -77,7 +75,7 @@ export default function Navbar() {
         <div className="fixed inset-0 z-40 bg-crema">
           <div className="flex flex-col items-center justify-center h-full gap-8">
             {navLinks.map(link => <Link key={link.to} to={link.to} className="font-playfair text-3xl text-cafe hover:text-turquesa transition-colors">{link.label}</Link>)}
-            {isAdmin && <Link to="/admin" className="font-playfair text-3xl text-turquesa flex items-center gap-2"><Settings size={24} /> Admin</Link>}
+            <Link to="/admin" onClick={() => setMobileOpen(false)} className="font-playfair text-3xl text-turquesa flex items-center gap-2"><Settings size={24} /> Admin</Link>
             {isAdmin && <button onClick={logout} className="font-playfair text-3xl text-cafe hover:text-turquesa flex items-center gap-2"><LogOut size={24} /> Salir</button>}
           </div>
         </div>

@@ -1,30 +1,44 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
+const ADMIN_STORAGE_KEY = 'kanymar_admin';
+const ADMIN_EVENT = 'kanymar-admin-change';
+const DEFAULT_PASSWORD_HASH = 'a2FueW1hcjIwMjY=';
+
+function readAdminSession() {
+  return localStorage.getItem(ADMIN_STORAGE_KEY) === 'true';
+}
 
 export function useAdmin() {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(readAdminSession);
 
   useEffect(() => {
-    const check = localStorage.getItem('kanymar_admin') === 'true';
-    setIsAdmin(check);
-    setIsLoading(false);
+    const syncSession = () => setIsAdmin(readAdminSession());
+
+    window.addEventListener('storage', syncSession);
+    window.addEventListener(ADMIN_EVENT, syncSession);
+
+    return () => {
+      window.removeEventListener('storage', syncSession);
+      window.removeEventListener(ADMIN_EVENT, syncSession);
+    };
   }, []);
 
   const login = useCallback((password: string) => {
-    // Default password: kanymar2026
     const hash = btoa(password);
-    if (hash === 'a2FueW1hcjIwMjY=') {
-      localStorage.setItem('kanymar_admin', 'true');
+    if (hash === DEFAULT_PASSWORD_HASH) {
+      localStorage.setItem(ADMIN_STORAGE_KEY, 'true');
       setIsAdmin(true);
+      window.dispatchEvent(new Event(ADMIN_EVENT));
       return true;
     }
     return false;
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem('kanymar_admin');
+    localStorage.removeItem(ADMIN_STORAGE_KEY);
     setIsAdmin(false);
+    window.dispatchEvent(new Event(ADMIN_EVENT));
   }, []);
 
-  return { isAdmin, isLoading, login, logout };
+  return { isAdmin, isLoading: false, login, logout };
 }
